@@ -101,6 +101,32 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
     def revoke_token_headers(self, token, uid):
         return {'Content-type': 'application/json'}
 
+class GoogleOAuth2YT(BaseGoogleOAuth2API, BaseOAuth2):
+    """Google OAuth2 authentication backend"""
+    name = 'google-oauth2-yt'
+    REDIRECT_STATE = False
+    AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/auth'
+    ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
+    REVOKE_TOKEN_METHOD = 'GET'
+    DEFAULT_SCOPE = ['email', 'profile']
+    DEPRECATED_DEFAULT_SCOPE = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+    ]
+    EXTRA_DATA = [
+        ('refresh_token', 'refresh_token', True),
+        ('expires_in', 'expires'),
+        ('token_type', 'token_type', True)
+    ]
+
+    def revoke_token_params(self, token, uid):
+        return {'token': token}
+
+    def revoke_token_headers(self, token, uid):
+        return {'Content-type': 'application/json'}
+
 
 class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     name = 'google-plus'
